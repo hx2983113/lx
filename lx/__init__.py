@@ -446,20 +446,20 @@ if isnotebook():
 package_files = {}
 
 
-# In[262]:
+# In[292]:
 
 
 package_files['setup.py'] = r"""from distutils.core import setup
 setup(
   name = 'lx',         # How you named your package folder (MyLib)
   packages = ['lx'],   # Chose the same as "name"
-  version = '0.1',      # Start with a small number and increase it with every change you make
+  version = '0.11',      # Start with a small number and increase it with every change you make
   license='MIT',        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
   description = 'lx',   # Give a short description about your library
   author = 'lx',                   # Type in your name
   author_email = 'hx2983113@gmail.com',      # Type in your E-Mail
   url = 'https://github.com/hx2983113/lx',   # Provide either the link to your github or to your website
-  download_url = 'https://github.com/hx2983113/lx/archive/0.1.tar.gz',    # I explain this later on
+  download_url = 'https://github.com/hx2983113/lx/archive/0.11.tar.gz',    # I explain this later on
   keywords = [],   # Keywords that define your package best
   install_requires=[
       {requirements}
@@ -477,7 +477,7 @@ setup(
 )""".format(requirements=", ".join(["'" + r + "'" for r in requirements]))
 
 
-# In[266]:
+# In[293]:
 
 
 package_files['setup.cfg'] = r"""# Inside of setup.cfg
@@ -486,7 +486,7 @@ description-file = README.md
 """
 
 
-# In[267]:
+# In[294]:
 
 
 package_files['LICENSE.txt'] = r"""MIT License
@@ -508,25 +508,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE."""
 
 
-# In[268]:
+# In[295]:
 
 
 package_files['README.md'] = ""
 
 
-# In[269]:
+# In[296]:
 
 
 get_ipython().system(' jupyter nbconvert --to script lx.ipynb')
 
 
-# In[270]:
+# In[297]:
 
 
 package_files['lx/__init__.py'] = txtopen("lx.py")
 
 
-# In[290]:
+# In[308]:
 
 
 def shell(cmd):
@@ -534,14 +534,38 @@ def shell(cmd):
     return result.stdout.decode()
 
 
-# In[ ]:
+# In[317]:
 
 
 if isnotebook():
     with tempfile.TemporaryDirectory() as d:
+        print(shell("cd {} && git clone https://github.com/hx2983113/lx.git".format(d)))
+        d = os.path.join(d, 'lx')
+        
         for key, value in package_files.items():
             txtwrite(os.path.join(d, key), value)
-        print(shell("cd {} && python setup.py sdist && twine upload dist/* --verbose".format(d)))
+            
+        print("\n".join(fiFindByWildcard(os.path.join(d, '**/*'))))
+        
+        print(shell("cd {d} && git status && git config user.name 'lx' && git config user.email 'lx' && git commit -a -m 'Add' && git log && git push && python setup.py sdist && twine upload dist/* --verbose".format(d=d)))
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
